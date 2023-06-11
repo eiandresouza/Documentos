@@ -1,6 +1,6 @@
 # Spawn de arma
 
-qui está um detalhamento passo a passo do código:
+Um detalhamento passo a passo do código:
 
 - A função registra o comando e especifica uma função de retorno de chamada que será executada quando o comando for acionado.RegisterCommand'dararma'
 
