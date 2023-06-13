@@ -52,8 +52,35 @@ RegisterCommand('car', async (source, args) => {
                 DeleteEntity(vehicle);
             }
         } else {
-            // Registra uma mensagem de erro se o jogador não estiver em um veículo
-            console.error('Erro: Você não está em um veículo.');
+            // Obtém as coordenadas e a rotação do jogador
+            const [x, y, z] = GetEntityCoords(playerPed);
+            const heading = GetEntityHeading(playerPed);
+
+            // Gera o novo veículo próximo ao jogador
+            const vehicle = CreateVehicle(modelHash, x + 2, y + 2, z + 1, heading, false, false);
+
+            // Obtém o ID de rede do veículo
+            const networkId = NetworkGetNetworkIdFromEntity(vehicle);
+
+            if (networkId !== 0) {
+                // Marca o veículo como não mais necessário
+                SetVehicleAsNoLongerNeeded(vehicle);
+
+                // Marca o modelo do veículo como não mais necessário
+                SetModelAsNoLongerNeeded(vehicleModel);
+
+                // Coloca o jogador dentro do veículo
+                SetPedIntoVehicle(playerPed, vehicle, -1);
+
+                // Registra uma mensagem de sucesso
+                console.log('Veículo gerado:', vehicleModel);
+            } else {
+                // Registra uma mensagem de erro se a geração falhar
+                console.error('Falha ao gerar veículo:', vehicleModel);
+
+                // Exclui a entidade do veículo se o ID de rede for inválido
+                DeleteEntity(vehicle);
+            }
         }
     } catch (error) {
         // Registra uma mensagem de erro se a geração falhar
