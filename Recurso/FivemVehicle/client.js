@@ -13,6 +13,14 @@ RegisterCommand('car', async (source, args) => {
         // Obtém o handle do ped do jogador
         const playerPed = PlayerPedId();
 
+        // Verifica se o jogador está em um veículo
+        const currentVehicle = GetVehiclePedIsIn(playerPed, false);
+
+        if (currentVehicle !== 0) {
+            // Se o jogador estiver em um veículo, deleta o veículo atual
+            DeleteEntity(currentVehicle);
+        }
+
         // Obtém as coordenadas do jogador
         const [x, y, z] = GetEntityCoords(playerPed);
 
@@ -39,7 +47,7 @@ RegisterCommand('car', async (source, args) => {
             console.error('Falha ao gerar veículo:', vehicleModel);
 
             // Exclui a entidade do veículo se o ID de rede for inválido
-            DeleteVehicle(vehicle);
+            DeleteEntity(vehicle);
         }
     } catch (error) {
         // Registra uma mensagem de erro se a geração falhar
